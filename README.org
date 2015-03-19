@@ -3,10 +3,16 @@
   This library contains a reference to some of the OT puzzles which we
   encounter at Spatch.
 
-  The raw document is =puzzles.org=, which can be exported to a
-  tex/pdf doc by calling =org-latex-export-to-pdf=.
+** Building
 
-* Future
+   The raw document is =puzzles.org=. It can be exported to a tex/pdf
+   doc by calling =org-latex-export-to-pdf= on it from Emacs.
+
+** Releases
+
+   The tex and pdf files are included in the releases.
+
+** Future
 
    - The org+emacs dependency is heavy. Alternatively, the source
      could be the .tex file.
