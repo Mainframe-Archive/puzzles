@@ -1,0 +1,127 @@
+#+LATEX_HEADER: \usepackage{msc}
+
+* Puzzles
+
+  We keep running into the same edge cases. Here's a portfolio of
+  some.
+
+** Diagram
+
+   Here's an example diagram drawn using [[http://satoss.uni.lu/software/mscpackage/][mscpackage]]:
+
+   #+BEGIN_LaTeX
+    \begin{msc}{Classic Example}
+    \setlength{\levelheight}{2\levelheight}
+    \setlength{\envinstdist}{2\envinstdist}
+
+    \declinst{s1}{$s_{1}$}{``abc''}
+    \declinst{s2}{$s_{2}$}{``abc''}
+
+    \msccomment[l]{A = Ins(0, x)}{s1}
+    \mess{A}{s1}[0.1]{s2}[3]
+    \msccomment[r]{B = Del(2)}{s2}
+    \mess{B}{s2}[0.1]{s1}[3]
+
+    \nextlevel
+    \action{``xabc''}{s1}
+    \action{``ab''}{s2}
+
+    \nextlevel
+
+    \nextlevel
+    \msccomment[l]{IT(B, A)}{s1}
+    \msccomment[r]{IT(A, B)}{s2}
+
+    \nextlevel
+    \action{``xab''}{s1}
+    \action{``xab''}{s2}
+
+    \end{msc}
+   #+END_LaTeX
+
+** Access
+
+   A /cooperative change/ is a change to the data document, while
+   an /administrative change/ is a change to the ACL.
+
+   Because there is a causal dependency between administrative and
+   cooperative changes, they must be coordinated.
+
+*** Post-hoc Revoked Write Access
+
+    If a site creates an operation concurrent to its access being
+    revoked, sites must agree on a common ordering (or is OT
+    sufficient?) to converge.
+
+    #+BEGIN_LaTeX
+      \begin{msc}{Failed convergence on access revocation}
+    \setlength{\levelheight}{2\levelheight}
+      \setlength{\envinstdist}{2\envinstdist}
+
+      \declinst{s1}{$s_{1}$}{``abc''}
+      \declinst{s2}{$s_{2}$}{``abc''}
+      \declinst{s3}{$s_{3}$}{``abc''}
+
+      \msccomment[l]{revoke access: $s_{2}$}{s1}
+      \mess{}{s1}[0.1]{s2}[3]
+      \mess{}{s1}[0.1]{s3}[3]
+
+      \msccomment[r]{A = Del(0)}{s2}
+      \mess{A}{s2}[0.3]{s1}[2]
+      \mess{A}[b]{s2}[0.3]{s3}[1]
+
+      \nextlevel
+      \action{``bc''}{s2}
+      \msccomment[r]{A accepted}{s3}
+
+      \nextlevel
+      \msccomment[l]{A ignored}{s1}
+      \action{``bc''}{s3}
+
+      \nextlevel
+      \action{``abc''}{s1}
+      \action{``bc''}{s2}
+      \action{``bc''}{s3}
+
+      \end{msc}
+    #+END_LaTeX
+
+    Source: Imine, 2009
+
+*** Adding Write Access
+
+    This is similar to the previous case, but caused by granting a
+    site access:
+
+    #+BEGIN_LaTeX
+      \begin{msc}{Failed convergence on access add}
+    \setlength{\levelheight}{2\levelheight}
+      \setlength{\envinstdist}{2\envinstdist}
+
+      \declinst{s1}{$s_{1}$}{``abc''}
+      \declinst{s2}{$s_{2}$}{``abc''}
+      \declinst{s3}{$s_{3}$}{``abc''}
+
+      \msccomment[l]{add access: s2}{s1}
+      \mess{}{s1}{s2}[1]
+      \mess{}{s1}{s3}[5]
+
+      \nextlevel
+      \nextlevel
+      \msccomment[r]{A = Del(0)}{s2}
+      \mess{}{s2}[0.1]{s1}[1]
+      \mess{}{s2}[0.1]{s3}[1]
+
+      \nextlevel
+      \msccomment[l]{A accepted}{s1}
+      \msccomment[r]{A ignored}{s3}
+
+      \nextlevel
+
+      \nextlevel
+      \action{``bc''}{s1}
+      \action{``bc''}{s2}
+      \action{``abc''}{s3}
+
+      \end{msc}
+    #+END_LaTeX
